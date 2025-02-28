@@ -3,7 +3,7 @@
 
 import { Errors } from '@/types';
 import { Button } from 'flowbite-react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import * as Yup from 'yup';
@@ -15,6 +15,7 @@ import google from '@/assets/form/google.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineLoading } from 'react-icons/ai';
+import { signIn, useSession } from 'next-auth/react';
 
 const formData = {
     username: '',
@@ -30,6 +31,7 @@ export default function Page() {
     const [loading, setLoading] = useState(false);
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const { data: session } = useSession()
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required("Please enter your username"),
@@ -79,6 +81,7 @@ export default function Page() {
             setLoading(false);
         }
     };
+    if(session) redirect('/')
 
     return (
         <div className="flex w-full h-[100dvh] md:gap-8 lg:gap-10">
@@ -151,10 +154,16 @@ export default function Page() {
                         </p>
                     </div>
                     <div className="flex items-center gap-2 w-full">
-                        <div className="bg-gray-100 w-full inline-flex justify-center items-center py-2 rounded-md gap-2 cursor-pointer">
+                        <div
+                            className="bg-gray-100 w-full inline-flex justify-center items-center py-2 rounded-md gap-2 cursor-pointer"
+                            onClick={() => signIn('google')}
+                        >
                             <Image src={google} width={24} alt="google" /> <span className="text-sm md:text-base">Google</span>
                         </div>
-                        <div className="bg-gray-100 w-full inline-flex justify-center items-center py-2 rounded-md gap-2 cursor-pointer" >
+                        <div
+                            className="bg-gray-100 w-full inline-flex justify-center items-center py-2 rounded-md gap-2 cursor-pointer"
+                            onClick={() => signIn('facebook')}
+                        >
                             <Image src={facebook} width={24} alt="facebook" /> <span className="text-sm md:text-base">Facebook</span>
                         </div>
                     </div>

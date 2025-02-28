@@ -1,15 +1,23 @@
+import { Kantumruy_Pro, Noto_Sans_SC, Poppins } from "next/font/google";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import AuthProvider from "./context/AuthProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const KantumruyFont = Kantumruy_Pro({
+  variable: "--font-kantumruy",
+  subsets: ["khmer"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const PoppinsFont = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+const NatoSansSCFont = Noto_Sans_SC({
+  variable: "--font-notosanssc",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -25,9 +33,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${KantumruyFont.variable} ${PoppinsFont.variable}  ${NatoSansSCFont.variable} antialiased lang-en`}
       >
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
